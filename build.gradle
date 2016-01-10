@@ -1,0 +1,29 @@
+
+plugins {
+  id 'java'
+  id 'groovy'
+  id 'eclipse'
+  id 'maven'
+}
+
+apply from: 'kerbtier-defaults.gradle'
+
+
+dependencies {
+  compile 'ch.kerbtier.struwwel:struwwel:0.1.+'
+  compile 'ch.kerbtier.pogo-tree:pogo-tree:0.1.+'
+  compile 'ch.kerbtier.achaia:achaia:0.1.+'
+  
+  testCompile 'com.h2database:h2:1.4.188'
+  testCompile 'com.mchange:c3p0:0.9.5.1'
+  testCompile 'junit:junit:4.12'
+}
+
+test {
+  exclude '**/util/*'
+  
+  testLogging {
+    exceptionFormat = 'full'
+    stackTraceFilters 'groovy'
+  }
+}
