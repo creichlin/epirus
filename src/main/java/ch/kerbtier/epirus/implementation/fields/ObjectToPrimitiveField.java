@@ -28,10 +28,8 @@ public class ObjectToPrimitiveField implements ObjectField {
 
   @Override
   public void set(Object value) {
-    if(value != null) {
-      if(!entity.is(value.getClass())) {
-        throw new WrongFieldType("trying to set " + value.getClass() + " on field with type " + entity);
-      }
+    if(value != null && !entity.is(value.getClass())) {
+      throw new WrongFieldType("trying to set " + value.getClass() + " on field with type " + entity);
     }
     newValue = value;
     valueWritten = true;
