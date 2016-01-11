@@ -4,7 +4,8 @@ plugins {
   id 'groovy'
   id 'eclipse'
   id 'maven'
-}
+  id 'jacoco'
+  id 'pmd'}
 
 apply from: 'kerbtier-defaults.gradle'
 
@@ -25,5 +26,13 @@ test {
   testLogging {
     exceptionFormat = 'full'
     stackTraceFilters 'groovy'
+  }
+}
+
+jacocoTestReport {
+  dependsOn test
+  
+  reports {
+      html.enabled = true
   }
 }
