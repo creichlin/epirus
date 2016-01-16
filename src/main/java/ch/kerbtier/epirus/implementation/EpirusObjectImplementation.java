@@ -8,7 +8,6 @@ import ch.kerbtier.epirus.EpirusContainer;
 import ch.kerbtier.epirus.EpirusObject;
 import ch.kerbtier.epirus.implementation.fields.ObjectField;
 import ch.kerbtier.epirus.implementation.parents.Parent;
-import ch.kerbtier.pogo.Pogo;
 import ch.kerbtier.pogo.PogoObject;
 import ch.kerbtier.pogo.PogoTransaction;
 
@@ -16,7 +15,6 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation im
 
   private MapEntity schema;
   private PogoObject subject;
-  private Pogo pogo;
   
   private Map<String, ObjectField> fields = new HashMap<>();
   

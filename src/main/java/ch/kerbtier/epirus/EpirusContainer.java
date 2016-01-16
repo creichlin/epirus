@@ -13,7 +13,7 @@ public interface EpirusContainer {
    * 
    * any made and not commited changes are discarded
    * 
-   * if accessed again all data must be fetched from database first
+   * if accessed again all data must be fetched from database again
    */
   EpirusContainer clear();
   

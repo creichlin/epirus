@@ -11,6 +11,7 @@ post: {
     content: string
   }]
   hits: [date]
+  tags: [string]
   meta: {
     foo: string
     bar: string
