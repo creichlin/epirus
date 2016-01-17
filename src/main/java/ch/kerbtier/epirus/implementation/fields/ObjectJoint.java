@@ -22,10 +22,10 @@ public interface ObjectJoint extends Joint {
     }
 
     if (entity.is(Type.MAP)) {
-      return new ObjectToObjectField((MapEntity) entity, epirusParent, (PogoObject) pogoValue);
+      return new ObjectJointObject((MapEntity) entity, epirusParent, (PogoObject) pogoValue);
 
     } else if (entity.is(Type.LIST)) {
-      return new ObjectToListField((ListEntity) entity, epirusParent, (PogoList) pogoValue);
+      return new ObjectJointList((ListEntity) entity, epirusParent, (PogoList) pogoValue);
 
     } else if (entity.getType().isPrimitive()) {
       return new ObjectJointPrimitive(entity, epirusParent, pogoValue);
@@ -38,7 +38,7 @@ public interface ObjectJoint extends Joint {
 
   void set(Object value);
 
-  void write();
+  void writeCommit();
 
   void delete();
   

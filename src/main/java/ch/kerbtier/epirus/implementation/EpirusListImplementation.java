@@ -8,22 +8,23 @@ import ch.kerbtier.pogo.PogoList;
 public abstract class EpirusListImplementation extends EpirusContainerImplementation<JointList> implements EpirusList {
 
   private ListEntity schema;
-  private PogoList subject;
+  private PogoList backend;
 
-  public EpirusListImplementation(JointList parent, ListEntity schema, PogoList subject) {
+  public EpirusListImplementation(JointList parent, ListEntity schema, PogoList backend) {
     super(parent);
     this.schema = schema;
-    this.subject = subject;
+    this.backend = backend;
   }
 
-  
-  // implementation
-
-  public PogoList getSubject() {
-    return subject;
+  public PogoList getBackend() {
+    return backend;
   }
 
-  public void setPogo(PogoList subject) {
-    this.subject = subject;
+  public void setBackend(PogoList backend) {
+    this.backend = backend;
+  }
+
+  public ListEntity getSchema() {
+    return schema;
   }
 }

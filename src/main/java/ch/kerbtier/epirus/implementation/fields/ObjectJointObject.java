@@ -5,7 +5,7 @@ import ch.kerbtier.epirus.implementation.EpirusObjectImplementation;
 import ch.kerbtier.pogo.Pogo;
 import ch.kerbtier.pogo.PogoObject;
 
-public class ObjectToObjectField implements ObjectJoint, JointObject {
+public class ObjectJointObject implements ObjectJoint, JointObject {
 
   private EpirusObjectImplementation parent;
   private MapEntity schema;
@@ -13,13 +13,13 @@ public class ObjectToObjectField implements ObjectJoint, JointObject {
   private PogoObject toDelete;
   private EpirusObjectImplementation epirusValue = null;
   
-  public ObjectToObjectField(MapEntity schema, EpirusObjectImplementation parent,  PogoObject pogoValue) {
+  public ObjectJointObject(MapEntity schema, EpirusObjectImplementation parent,  PogoObject pogoValue) {
     this.schema = schema;
     this.parent = parent;
     this.pogoValue = pogoValue;
     
     if(pogoValue == null) {
-      epirusValue = new EpirusObjectImplementation(schema, this);
+      epirusValue = new EpirusObjectImplementation(schema, this, null);
     } else {
       epirusValue = new EpirusObjectImplementation(schema, this, pogoValue);
     }
@@ -36,24 +36,24 @@ public class ObjectToObjectField implements ObjectJoint, JointObject {
   }
 
   @Override
-  public void write() {
+  public void writeCommit() {
     
     if(toDelete != null) {
       toDelete.delete();
     }
     
     if(pogoValue == null) {
-      parent.getSubject().set(schema.getName(), PogoObject.class);
-      pogoValue = parent.getSubject().get(schema.getName(), PogoObject.class);
+      parent.getBackend().set(schema.getName(), PogoObject.class);
+      pogoValue = parent.getBackend().get(schema.getName(), PogoObject.class);
       epirusValue.setPogo(pogoValue);
     }
-    epirusValue.writeFields();
+    epirusValue.writeCommit();
   }
 
   @Override
   public void delete() {
     // discard epirus node and create a new empty one
-    epirusValue = new EpirusObjectImplementation(schema, this);
+    epirusValue = new EpirusObjectImplementation(schema, this, null);
     
     if(pogoValue != null) {
       // store old pogo node so we can delete it on commit

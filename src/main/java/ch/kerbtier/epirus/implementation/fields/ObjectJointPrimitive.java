@@ -39,13 +39,13 @@ public class ObjectJointPrimitive implements ObjectJoint, JointPrimitive {
   }
 
   @Override
-  public void write() {
+  public void writeCommit() {
     if(valueWritten) {
-      parent.getSubject().set(schema.getName(), newValue);
-      pogoValue = parent.getSubject().get(schema.getName());
+      parent.getBackend().set(schema.getName(), newValue);
+      pogoValue = parent.getBackend().get(schema.getName());
       valueWritten = false;
     } else if(valueDeleted) {
-      parent.getSubject().delete(schema.getName());
+      parent.getBackend().delete(schema.getName());
       valueDeleted = false;
     }
   }

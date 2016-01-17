@@ -17,11 +17,9 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
   public EpirusPrimitiveListImplementation(ListEntity schema, JointList parent, PogoList subject) {
     super(parent, schema, subject);
     
-    loadFromBackend();
-  }
-
-  public EpirusPrimitiveListImplementation(ListEntity schema, JointList parent) {
-    this(schema, parent, null);
+    if(getBackend() != null) {
+      loadFromBackend();
+    }
   }
 
   @Override
@@ -56,7 +54,7 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
   // implementation
   
   @Override
-  public void writeFields() {
+  public void writeCommit() {
     for(ListJointPrimitive element: elements) {
       if(element.getState() == ValueState.UNSAVED) {
         element.write();
@@ -73,9 +71,9 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
   }
   
   private void loadFromBackend() {
-    if(getSubject() != null) {
-      for(int cnt = 0; cnt < getSubject().size(); cnt++) {
-        Object value = getSubject().get(cnt);
+    if(getBackend() != null) {
+      for(int cnt = 0; cnt < getBackend().size(); cnt++) {
+        Object value = getBackend().get(cnt);
         elements.add(new ListJointPrimitive(getPogo(), this, cnt, value));
       }
     }

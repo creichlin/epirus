@@ -49,8 +49,8 @@ public class ListJointPrimitive implements ListJoint {
 
   public void write() {
     if(state == UNSAVED) {
-      parent.getSubject().add(value);
-      pogoValue = parent.getSubject().get(index);
+      parent.getBackend().add(value);
+      pogoValue = parent.getBackend().get(index);
       state = save(state);
     } else if(state == MODIFIED) {
       throw new AssertionError();

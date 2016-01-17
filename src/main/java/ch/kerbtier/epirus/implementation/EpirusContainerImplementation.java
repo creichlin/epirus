@@ -23,12 +23,12 @@ public abstract class EpirusContainerImplementation<JOINT_TYPE extends Joint> im
     return parent;
   }
   
-  abstract void writeFields();
+  abstract void writeCommit();
   
   @Override
   public EpirusContainer commit() {
     PogoTransaction transaction = getPogo().start();
-    writeFields();
+    writeCommit();
     transaction.commit();
     return this;
   }

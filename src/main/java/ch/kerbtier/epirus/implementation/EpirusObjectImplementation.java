@@ -1,8 +1,6 @@
 package ch.kerbtier.epirus.implementation;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import ch.kerbtier.achaia.schema.MapEntity;
@@ -15,18 +13,13 @@ import ch.kerbtier.pogo.PogoObject;
 public class EpirusObjectImplementation extends EpirusContainerImplementation<JointObject> implements EpirusObject {
 
   private MapEntity schema;
-  private PogoObject subject;
-  
+  private PogoObject backend;
   private Map<String, ObjectJoint> fields = new HashMap<>();
   
-  public EpirusObjectImplementation(MapEntity schema, JointObject parent) {
+  public EpirusObjectImplementation(MapEntity schema, JointObject parent, PogoObject backend) {
     super(parent);
     this.schema = schema;
-  }
-
-  public EpirusObjectImplementation(MapEntity schema, JointObject parent, PogoObject subject) {
-    this(schema, parent);
-    this.subject = subject;
+    this.backend = backend;
   }
 
   // EpirusObject interface 
@@ -42,9 +35,8 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation<Jo
   }
 
   @Override
-  public void delete(String fieldName) {
-    ObjectJoint field = getField(fieldName);
-    field.delete();
+  public void delete(String field) {
+    getField(field).delete();
   }
   
   // EpirusContainer interface
@@ -66,19 +58,19 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation<Jo
     return schema;
   }
 
-  public void setPogo(PogoObject subject) {
-    this.subject = subject;
+  public void setPogo(PogoObject backend) {
+    this.backend = backend;
   }
 
   @Override
-  public void writeFields() {
+  public void writeCommit() {
     for(Map.Entry<String, ObjectJoint> entry: fields.entrySet()) {
-      entry.getValue().write();
+      entry.getValue().writeCommit();
     }
   }
 
-  public PogoObject getSubject() {
-    return subject;
+  public PogoObject getBackend() {
+    return backend;
   }
 
   // Private parts
@@ -87,8 +79,7 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation<Jo
     ObjectJoint field = fields.get(fieldName);
     
     if(field == null) {
-
-      field = ObjectJoint.create(this, schema.get(fieldName), subject);
+      field = ObjectJoint.create(this, schema.get(fieldName), backend);
       fields.put(fieldName, field);
     }
     return field;
