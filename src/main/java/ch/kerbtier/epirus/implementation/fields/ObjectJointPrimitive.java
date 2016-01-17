@@ -2,19 +2,20 @@ package ch.kerbtier.epirus.implementation.fields;
 
 import ch.kerbtier.achaia.schema.Entity;
 import ch.kerbtier.epirus.WrongFieldType;
-import ch.kerbtier.epirus.implementation.parents.Parent;
+import ch.kerbtier.epirus.implementation.EpirusObjectImplementation;
+import ch.kerbtier.pogo.Pogo;
 
-public class ObjectToPrimitiveField implements ObjectField {
+public class ObjectJointPrimitive implements ObjectJoint, JointPrimitive {
 
-  private Entity entity;
+  private Entity schema;
+  private EpirusObjectImplementation parent;
   private Object pogoValue;
   private Object newValue;
   private boolean valueWritten = false;
   private boolean valueDeleted = false;
-  private Parent parent;
   
-  public ObjectToPrimitiveField(Entity entity, Parent parent, Object pogoValue) {
-    this.entity = entity;
+  public ObjectJointPrimitive(Entity schema, EpirusObjectImplementation parent, Object pogoValue) {
+    this.schema = schema;
     this.parent = parent;
     this.pogoValue = pogoValue;
   }
@@ -29,8 +30,8 @@ public class ObjectToPrimitiveField implements ObjectField {
 
   @Override
   public void set(Object value) {
-    if(value != null && !entity.is(value.getClass())) {
-      throw new WrongFieldType("trying to set " + value.getClass() + " on field with type " + entity);
+    if(value != null && !schema.is(value.getClass())) {
+      throw new WrongFieldType("trying to set " + value.getClass() + " on field with type " + schema);
     }
     newValue = value;
     valueWritten = true;
@@ -40,11 +41,11 @@ public class ObjectToPrimitiveField implements ObjectField {
   @Override
   public void write() {
     if(valueWritten) {
-      parent.set(newValue);
-      pogoValue = parent.get();
+      parent.getSubject().set(schema.getName(), newValue);
+      pogoValue = parent.getSubject().get(schema.getName());
       valueWritten = false;
     } else if(valueDeleted) {
-      parent.deletePogo();
+      parent.getSubject().delete(schema.getName());
       valueDeleted = false;
     }
   }
@@ -54,5 +55,10 @@ public class ObjectToPrimitiveField implements ObjectField {
     valueWritten = true;
     valueDeleted = true;
     newValue = null;
+  }
+
+  @Override
+  public Pogo getPogoRoot() {
+    return parent.getPogo();
   }
 }

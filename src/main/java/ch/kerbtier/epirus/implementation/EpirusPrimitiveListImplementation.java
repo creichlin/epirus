@@ -5,22 +5,22 @@ import java.util.List;
 
 import ch.kerbtier.achaia.schema.ListEntity;
 import ch.kerbtier.epirus.EpirusPrimitiveList;
-import ch.kerbtier.epirus.implementation.fields.PrimitiveListElement;
+import ch.kerbtier.epirus.implementation.fields.JointList;
+import ch.kerbtier.epirus.implementation.fields.ListJointPrimitive;
 import ch.kerbtier.epirus.implementation.fields.ValueState;
-import ch.kerbtier.epirus.implementation.parents.Parent;
 import ch.kerbtier.pogo.PogoList;
 
 public class EpirusPrimitiveListImplementation extends EpirusListImplementation implements EpirusPrimitiveList {
 
-  private List<PrimitiveListElement> elements = new ArrayList<>();
+  private List<ListJointPrimitive> elements = new ArrayList<>();
   
-  public EpirusPrimitiveListImplementation(ListEntity schema, Parent parent, PogoList subject) {
+  public EpirusPrimitiveListImplementation(ListEntity schema, JointList parent, PogoList subject) {
     super(parent, schema, subject);
     
     loadFromBackend();
   }
 
-  public EpirusPrimitiveListImplementation(ListEntity schema, Parent parent) {
+  public EpirusPrimitiveListImplementation(ListEntity schema, JointList parent) {
     this(schema, parent, null);
   }
 
@@ -43,7 +43,7 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
 
   @Override
   public void add(Object value) {
-    PrimitiveListElement element = new PrimitiveListElement(this, size());
+    ListJointPrimitive element = new ListJointPrimitive(getPogo(), this, size());
     element.set(value);
     elements.add(element);
   }
@@ -57,7 +57,7 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
   
   @Override
   public void writeFields() {
-    for(PrimitiveListElement element: elements) {
+    for(ListJointPrimitive element: elements) {
       if(element.getState() == ValueState.UNSAVED) {
         element.write();
       }
@@ -76,8 +76,13 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
     if(getSubject() != null) {
       for(int cnt = 0; cnt < getSubject().size(); cnt++) {
         Object value = getSubject().get(cnt);
-        elements.add(new PrimitiveListElement(this, cnt, value));
+        elements.add(new ListJointPrimitive(getPogo(), this, cnt, value));
       }
     }
+  }
+
+  @Override
+  public void delete(int index) {
+    throw new AssertionError();
   }
 }

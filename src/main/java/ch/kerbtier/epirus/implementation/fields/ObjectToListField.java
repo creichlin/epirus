@@ -1,27 +1,29 @@
 package ch.kerbtier.epirus.implementation.fields;
 
 import ch.kerbtier.achaia.schema.ListEntity;
+import ch.kerbtier.epirus.implementation.EpirusObjectImplementation;
 import ch.kerbtier.epirus.implementation.EpirusPrimitiveListImplementation;
-import ch.kerbtier.epirus.implementation.parents.Parent;
+import ch.kerbtier.pogo.Pogo;
 import ch.kerbtier.pogo.PogoList;
 
-public class ObjectToListField implements ObjectField {
+public class ObjectToListField implements ObjectJoint, JointList {
 
   private ListEntity schema;
   private PogoList pogoValue;
   private PogoList toDelete = null;
-  private EpirusPrimitiveListImplementation epirusValue = null;
-  private Parent parent;
   
-  public ObjectToListField(ListEntity schema, Parent parent, PogoList pogoValue) {
+  private EpirusObjectImplementation parent = null;
+  private EpirusPrimitiveListImplementation epirusValue = null;
+  
+  public ObjectToListField(ListEntity schema, EpirusObjectImplementation parent, PogoList pogoValue) {
     this.schema = schema;
     this.parent = parent;
     this.pogoValue = pogoValue;
     
     if(pogoValue == null) {
-      epirusValue = new EpirusPrimitiveListImplementation(schema, parent);
+      epirusValue = new EpirusPrimitiveListImplementation(schema, this);
     } else {
-      epirusValue = new EpirusPrimitiveListImplementation(schema, parent, pogoValue);
+      epirusValue = new EpirusPrimitiveListImplementation(schema, this, pogoValue);
     }
   }
 
@@ -42,8 +44,8 @@ public class ObjectToListField implements ObjectField {
     }
     
     if(pogoValue == null) {
-      parent.set(PogoList.class);
-      pogoValue = parent.get(PogoList.class);
+      parent.getSubject().set(schema.getName(), PogoList.class);
+      pogoValue = parent.getSubject().get(schema.getName(), PogoList.class);
       epirusValue.setPogo(pogoValue);
     }
     epirusValue.writeFields();
@@ -52,7 +54,7 @@ public class ObjectToListField implements ObjectField {
   @Override
   public void delete() {
     // discard epirus node and create a new empty one
-    epirusValue = new EpirusPrimitiveListImplementation(schema, parent);
+    epirusValue = new EpirusPrimitiveListImplementation(schema, this);
     
     if(pogoValue != null) {
       // store old pogo node so we can delete it on commit
@@ -60,4 +62,10 @@ public class ObjectToListField implements ObjectField {
       pogoValue = null;
     }
   }
+
+  @Override
+  public Pogo getPogoRoot() {
+    return parent.getPogo();
+  }
+
 }

@@ -1,16 +1,16 @@
 package ch.kerbtier.epirus.implementation;
 
 import ch.kerbtier.epirus.EpirusContainer;
-import ch.kerbtier.epirus.implementation.parents.Parent;
+import ch.kerbtier.epirus.implementation.fields.Joint;
 import ch.kerbtier.pogo.Pogo;
 import ch.kerbtier.pogo.PogoTransaction;
 
-public abstract class EpirusContainerImplementation implements EpirusContainer {
+public abstract class EpirusContainerImplementation<JOINT_TYPE extends Joint> implements EpirusContainer {
 
   private Pogo pogo;
-  private Parent parent;
+  private JOINT_TYPE parent;
 
-  public EpirusContainerImplementation(Parent parent) {
+  public EpirusContainerImplementation(JOINT_TYPE parent) {
     this.pogo = parent.getPogoRoot();
     this.parent = parent;
   }
@@ -19,7 +19,7 @@ public abstract class EpirusContainerImplementation implements EpirusContainer {
     return pogo;
   }
   
-  public Parent getParent() {
+  public JOINT_TYPE getParent() {
     return parent;
   }
   

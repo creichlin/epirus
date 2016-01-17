@@ -8,23 +8,23 @@ import java.util.Map;
 import ch.kerbtier.achaia.schema.MapEntity;
 import ch.kerbtier.epirus.EpirusContainer;
 import ch.kerbtier.epirus.EpirusObject;
-import ch.kerbtier.epirus.implementation.fields.ObjectField;
-import ch.kerbtier.epirus.implementation.parents.Parent;
+import ch.kerbtier.epirus.implementation.fields.JointObject;
+import ch.kerbtier.epirus.implementation.fields.ObjectJoint;
 import ch.kerbtier.pogo.PogoObject;
 
-public class EpirusObjectImplementation extends EpirusContainerImplementation implements EpirusObject {
+public class EpirusObjectImplementation extends EpirusContainerImplementation<JointObject> implements EpirusObject {
 
   private MapEntity schema;
   private PogoObject subject;
   
-  private Map<String, ObjectField> fields = new HashMap<>();
+  private Map<String, ObjectJoint> fields = new HashMap<>();
   
-  public EpirusObjectImplementation(MapEntity schema, Parent parent) {
+  public EpirusObjectImplementation(MapEntity schema, JointObject parent) {
     super(parent);
     this.schema = schema;
   }
 
-  public EpirusObjectImplementation(MapEntity schema, Parent parent, PogoObject subject) {
+  public EpirusObjectImplementation(MapEntity schema, JointObject parent, PogoObject subject) {
     this(schema, parent);
     this.subject = subject;
   }
@@ -43,7 +43,7 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation im
 
   @Override
   public void delete(String fieldName) {
-    ObjectField field = getField(fieldName);
+    ObjectJoint field = getField(fieldName);
     field.delete();
   }
   
@@ -72,7 +72,7 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation im
 
   @Override
   public void writeFields() {
-    for(Map.Entry<String, ObjectField> entry: fields.entrySet()) {
+    for(Map.Entry<String, ObjectJoint> entry: fields.entrySet()) {
       entry.getValue().write();
     }
   }
@@ -83,12 +83,12 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation im
 
   // Private parts
 
-  private ObjectField getField(String fieldName) {
-    ObjectField field = fields.get(fieldName);
+  private ObjectJoint getField(String fieldName) {
+    ObjectJoint field = fields.get(fieldName);
     
     if(field == null) {
 
-      field = ObjectField.create(this, schema.get(fieldName), subject);
+      field = ObjectJoint.create(this, schema.get(fieldName), subject);
       fields.put(fieldName, field);
     }
     return field;

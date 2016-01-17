@@ -2,26 +2,26 @@ package ch.kerbtier.epirus.implementation.fields;
 
 import ch.kerbtier.achaia.schema.MapEntity;
 import ch.kerbtier.epirus.implementation.EpirusObjectImplementation;
-import ch.kerbtier.epirus.implementation.parents.Parent;
+import ch.kerbtier.pogo.Pogo;
 import ch.kerbtier.pogo.PogoObject;
 
-public class ObjectToObjectField implements ObjectField {
+public class ObjectToObjectField implements ObjectJoint, JointObject {
 
+  private EpirusObjectImplementation parent;
   private MapEntity schema;
   private PogoObject pogoValue;
   private PogoObject toDelete;
   private EpirusObjectImplementation epirusValue = null;
-  private Parent parent;
   
-  public ObjectToObjectField(MapEntity schema, Parent parent, PogoObject pogoValue) {
+  public ObjectToObjectField(MapEntity schema, EpirusObjectImplementation parent,  PogoObject pogoValue) {
     this.schema = schema;
     this.parent = parent;
     this.pogoValue = pogoValue;
     
     if(pogoValue == null) {
-      epirusValue = new EpirusObjectImplementation(schema, parent);
+      epirusValue = new EpirusObjectImplementation(schema, this);
     } else {
-      epirusValue = new EpirusObjectImplementation(schema, parent, pogoValue);
+      epirusValue = new EpirusObjectImplementation(schema, this, pogoValue);
     }
   }
 
@@ -43,8 +43,8 @@ public class ObjectToObjectField implements ObjectField {
     }
     
     if(pogoValue == null) {
-      parent.set(PogoObject.class);
-      pogoValue = parent.get(PogoObject.class);
+      parent.getSubject().set(schema.getName(), PogoObject.class);
+      pogoValue = parent.getSubject().get(schema.getName(), PogoObject.class);
       epirusValue.setPogo(pogoValue);
     }
     epirusValue.writeFields();
@@ -53,7 +53,7 @@ public class ObjectToObjectField implements ObjectField {
   @Override
   public void delete() {
     // discard epirus node and create a new empty one
-    epirusValue = new EpirusObjectImplementation(schema, parent);
+    epirusValue = new EpirusObjectImplementation(schema, this);
     
     if(pogoValue != null) {
       // store old pogo node so we can delete it on commit
@@ -62,4 +62,10 @@ public class ObjectToObjectField implements ObjectField {
     }
 
   }
+
+  @Override
+  public Pogo getPogoRoot() {
+    return parent.getPogo();
+  }
+
 }

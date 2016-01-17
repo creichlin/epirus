@@ -4,16 +4,14 @@ import ch.kerbtier.achaia.Type;
 import ch.kerbtier.achaia.schema.Entity;
 import ch.kerbtier.achaia.schema.ListEntity;
 import ch.kerbtier.achaia.schema.MapEntity;
-import ch.kerbtier.epirus.EpirusObject;
 import ch.kerbtier.epirus.implementation.EpirusObjectImplementation;
-import ch.kerbtier.epirus.implementation.parents.ObjectParent;
 import ch.kerbtier.pogo.PogoList;
 import ch.kerbtier.pogo.PogoObject;
 import ch.kerbtier.pogo.exceptions.NoSuchField;
 
-public interface ObjectField {
+public interface ObjectJoint extends Joint {
 
-  public static ObjectField create(EpirusObject epirusParent, Entity entity, PogoObject pogoParent) {
+  public static ObjectJoint create(EpirusObjectImplementation epirusParent, Entity entity, PogoObject pogoParent) {
 
     Object pogoValue;
 
@@ -23,16 +21,14 @@ public interface ObjectField {
       pogoValue = null;
     }
 
-    ObjectParent parent = new ObjectParent((EpirusObjectImplementation) epirusParent, entity.getName());
-
     if (entity.is(Type.MAP)) {
-      return new ObjectToObjectField((MapEntity) entity, parent, (PogoObject) pogoValue);
+      return new ObjectToObjectField((MapEntity) entity, epirusParent, (PogoObject) pogoValue);
 
     } else if (entity.is(Type.LIST)) {
-      return new ObjectToListField((ListEntity) entity, parent, (PogoList) pogoValue);
+      return new ObjectToListField((ListEntity) entity, epirusParent, (PogoList) pogoValue);
 
     } else if (entity.getType().isPrimitive()) {
-      return new ObjectToPrimitiveField(entity, parent, pogoValue);
+      return new ObjectJointPrimitive(entity, epirusParent, pogoValue);
 
     } else {
       throw new RuntimeException();
@@ -40,11 +36,10 @@ public interface ObjectField {
 
   }
 
-  Object get();
-
   void set(Object value);
 
   void write();
 
   void delete();
+  
 }
