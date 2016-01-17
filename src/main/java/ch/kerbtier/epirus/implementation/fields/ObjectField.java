@@ -45,4 +45,6 @@ public interface ObjectField {
   void set(Object value);
 
   void write();
+
+  void delete();
 }

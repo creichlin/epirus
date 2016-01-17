@@ -16,6 +16,7 @@ import ch.kerbtier.achaia.schema.implementation.ImpMapEntity;
 import ch.kerbtier.epirus.Epirus;
 import ch.kerbtier.epirus.implementation.EpirusImplementation;
 import ch.kerbtier.pogo.Pogo;
+import ch.kerbtier.pogo.hops.HopsPogo;
 import ch.kerbtier.pogo.PogoFactory;
 import ch.kerbtier.pogo.hops.HopsPogoFactory;
 
@@ -24,7 +25,7 @@ class EpirusTests {
   protected static int num = 0;
 
   protected MapEntity schema;
-  protected Pogo backend;
+  protected HopsPogo backend;
   protected Epirus root_;
 
   public Epirus getRoot() {
@@ -54,8 +55,10 @@ class EpirusTests {
           schema = new ImpMapEntity(null, "")
           Parse.extend(schema, Paths.get("src/test/resources", "post.model"))
     
-          PogoFactory factory = new HopsPogoFactory("org.h2.Driver", "jdbc:h2:mem:m" + (num++)
+          HopsPogoFactory factory = new HopsPogoFactory("org.h2.Driver", "jdbc:h2:mem:m" + (num++)
               + ";USER=test;PASSWORD=test;DB_CLOSE_DELAY=-1;MVCC=TRUE")
+          // factory.setPrintStatements(true)
+          
           backend = factory.create()
     
           root_ = new EpirusImplementation(schema, backend)
@@ -64,6 +67,10 @@ class EpirusTests {
         }
       }
     }
+  }
+  
+  void enableStatementLog() {
+    backend.db.setPrintStatements(true)
   }
 
   class SqlDumper extends TestWatcher {

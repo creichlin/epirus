@@ -10,6 +10,7 @@ public class ObjectToPrimitiveField implements ObjectField {
   private Object pogoValue;
   private Object newValue;
   private boolean valueWritten = false;
+  private boolean valueDeleted = false;
   private Parent parent;
   
   public ObjectToPrimitiveField(Entity entity, Parent parent, Object pogoValue) {
@@ -33,6 +34,7 @@ public class ObjectToPrimitiveField implements ObjectField {
     }
     newValue = value;
     valueWritten = true;
+    valueDeleted = false;
   }
 
   @Override
@@ -41,6 +43,16 @@ public class ObjectToPrimitiveField implements ObjectField {
       parent.set(newValue);
       pogoValue = parent.get();
       valueWritten = false;
+    } else if(valueDeleted) {
+      parent.deletePogo();
+      valueDeleted = false;
     }
+  }
+
+  @Override
+  public void delete() {
+    valueWritten = true;
+    valueDeleted = true;
+    newValue = null;
   }
 }

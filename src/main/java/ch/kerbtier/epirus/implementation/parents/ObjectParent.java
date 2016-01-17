@@ -38,4 +38,9 @@ public class ObjectParent implements Parent {
     parent.delete(field);
   }
 
+  @Override
+  public void deletePogo() {
+    parent.getSubject().delete(field);
+  }
+
 }

@@ -9,6 +9,7 @@ public class ObjectToListField implements ObjectField {
 
   private ListEntity schema;
   private PogoList pogoValue;
+  private PogoList toDelete = null;
   private EpirusPrimitiveListImplementation epirusValue = null;
   private Parent parent;
   
@@ -36,11 +37,27 @@ public class ObjectToListField implements ObjectField {
 
   @Override
   public void write() {
+    if(toDelete != null) {
+      toDelete.delete();
+    }
+    
     if(pogoValue == null) {
       parent.set(PogoList.class);
       pogoValue = parent.get(PogoList.class);
       epirusValue.setPogo(pogoValue);
     }
     epirusValue.writeFields();
+  }
+
+  @Override
+  public void delete() {
+    // discard epirus node and create a new empty one
+    epirusValue = new EpirusPrimitiveListImplementation(schema, parent);
+    
+    if(pogoValue != null) {
+      // store old pogo node so we can delete it on commit
+      toDelete = pogoValue;
+      pogoValue = null;
+    }
   }
 }

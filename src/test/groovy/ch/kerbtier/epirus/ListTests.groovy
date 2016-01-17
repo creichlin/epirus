@@ -36,6 +36,9 @@ class ListTests extends EpirusTests {
   
   @Test
   public void deleteWholeList() {
+    
+    enableStatementLog()
+    
     root['post']['tags'] << "BAR"
     root['post']['tags'] << "FOO"
     

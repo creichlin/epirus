@@ -9,6 +9,7 @@ public class ObjectToObjectField implements ObjectField {
 
   private MapEntity schema;
   private PogoObject pogoValue;
+  private PogoObject toDelete;
   private EpirusObjectImplementation epirusValue = null;
   private Parent parent;
   
@@ -36,11 +37,29 @@ public class ObjectToObjectField implements ObjectField {
 
   @Override
   public void write() {
+    
+    if(toDelete != null) {
+      toDelete.delete();
+    }
+    
     if(pogoValue == null) {
       parent.set(PogoObject.class);
       pogoValue = parent.get(PogoObject.class);
       epirusValue.setPogo(pogoValue);
     }
     epirusValue.writeFields();
+  }
+
+  @Override
+  public void delete() {
+    // discard epirus node and create a new empty one
+    epirusValue = new EpirusObjectImplementation(schema, parent);
+    
+    if(pogoValue != null) {
+      // store old pogo node so we can delete it on commit
+      toDelete = pogoValue;
+      pogoValue = null;
+    }
+
   }
 }

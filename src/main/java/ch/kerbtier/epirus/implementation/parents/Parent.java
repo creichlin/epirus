@@ -14,4 +14,6 @@ public interface Parent {
 
   void delete();
 
+  void deletePogo();
+
 }

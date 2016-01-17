@@ -1,6 +1,8 @@
 package ch.kerbtier.epirus.implementation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.kerbtier.achaia.schema.MapEntity;
@@ -40,13 +42,9 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation im
   }
 
   @Override
-  public void delete(String field) {
-    System.out.println("delete 1");
-    if(subject != null) {
-      subject.delete(field);
-      System.out.println("delete 2");
-    }
-    fields.remove(field);
+  public void delete(String fieldName) {
+    ObjectField field = getField(fieldName);
+    field.delete();
   }
   
   // EpirusContainer interface

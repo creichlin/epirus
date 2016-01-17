@@ -34,4 +34,9 @@ public class RootParent implements Parent {
   public void delete() {
     throw new AssertionError();
   }
+
+  @Override
+  public void deletePogo() {
+    throw new AssertionError();
+  }
 }
