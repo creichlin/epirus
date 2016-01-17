@@ -55,7 +55,7 @@ class EpirusTests {
           Parse.extend(schema, Paths.get("src/test/resources", "post.model"))
     
           PogoFactory factory = new HopsPogoFactory("org.h2.Driver", "jdbc:h2:mem:m" + (num++)
-              + ";USER=test;PASSWORD=test;DB_CLOSE_DELAY=-1")
+              + ";USER=test;PASSWORD=test;DB_CLOSE_DELAY=-1;MVCC=TRUE")
           backend = factory.create()
     
           root_ = new EpirusImplementation(schema, backend)

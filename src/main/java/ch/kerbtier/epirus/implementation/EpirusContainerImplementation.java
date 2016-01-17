@@ -3,6 +3,7 @@ package ch.kerbtier.epirus.implementation;
 import ch.kerbtier.epirus.EpirusContainer;
 import ch.kerbtier.epirus.implementation.parents.Parent;
 import ch.kerbtier.pogo.Pogo;
+import ch.kerbtier.pogo.PogoTransaction;
 
 public abstract class EpirusContainerImplementation implements EpirusContainer {
 
@@ -20,5 +21,15 @@ public abstract class EpirusContainerImplementation implements EpirusContainer {
   
   public Parent getParent() {
     return parent;
+  }
+  
+  abstract void writeFields();
+  
+  @Override
+  public EpirusContainer commit() {
+    PogoTransaction transaction = getPogo().start();
+    writeFields();
+    transaction.commit();
+    return this;
   }
 }

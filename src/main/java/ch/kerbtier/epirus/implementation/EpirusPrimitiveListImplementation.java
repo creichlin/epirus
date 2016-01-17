@@ -30,12 +30,6 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
   }
 
   @Override
-  public EpirusPrimitiveList commit() {
-    // TODO Auto-generated method stub
-    return this;
-  }
-
-  @Override
   public EpirusPrimitiveList clear() {
     elements.clear();
     loadFromBackend();
@@ -44,8 +38,7 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
 
   @Override
   public void delete() {
-    // TODO Auto-generated method stub
-    
+    getParent().delete();
   }
 
   @Override
@@ -59,11 +52,11 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
   public int size() {
     return elements.size();
   }
-  
+
   // implementation
   
+  @Override
   public void writeFields() {
-    
     for(PrimitiveListElement element: elements) {
       if(element.getState() == ValueState.UNSAVED) {
         element.write();
@@ -87,6 +80,4 @@ public class EpirusPrimitiveListImplementation extends EpirusListImplementation 
       }
     }
   }
-
-
 }

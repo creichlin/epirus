@@ -50,10 +50,8 @@ public class PrimitiveListElement {
 
   public void write() {
     if(state == UNSAVED) {
-      System.out.println("SAVE " + value);
       subject.getSubject().add(value);
       pogoValue = subject.getSubject().get(index);
-      System.out.println("SAVE " + value + " " + pogoValue);
       state = save(state);
     } else if(state == MODIFIED) {
       throw new AssertionError();

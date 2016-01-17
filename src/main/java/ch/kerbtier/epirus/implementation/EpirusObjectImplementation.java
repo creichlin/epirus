@@ -9,7 +9,6 @@ import ch.kerbtier.epirus.EpirusObject;
 import ch.kerbtier.epirus.implementation.fields.ObjectField;
 import ch.kerbtier.epirus.implementation.parents.Parent;
 import ch.kerbtier.pogo.PogoObject;
-import ch.kerbtier.pogo.PogoTransaction;
 
 public class EpirusObjectImplementation extends EpirusContainerImplementation implements EpirusObject {
 
@@ -42,22 +41,16 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation im
 
   @Override
   public void delete(String field) {
+    System.out.println("delete 1");
     if(subject != null) {
       subject.delete(field);
+      System.out.println("delete 2");
     }
     fields.remove(field);
   }
   
   // EpirusContainer interface
   
-  @Override
-  public EpirusContainer commit() {
-    PogoTransaction transaction = getPogo().start();
-    writeFields();
-    transaction.commit();
-    return this;
-  }
-
   @Override
   public EpirusContainer clear() {
     fields.clear();
@@ -79,6 +72,7 @@ public class EpirusObjectImplementation extends EpirusContainerImplementation im
     this.subject = subject;
   }
 
+  @Override
   public void writeFields() {
     for(Map.Entry<String, ObjectField> entry: fields.entrySet()) {
       entry.getValue().write();

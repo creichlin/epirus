@@ -34,4 +34,27 @@ class ListTests extends EpirusTests {
     assert root['post']['tags'][0] == 'BAR'
   }
   
+  @Test
+  public void deleteWholeList() {
+    root['post']['tags'] << "BAR"
+    root['post']['tags'] << "FOO"
+    
+    root['post']['tags'].delete()
+
+    assert root['post']['tags'].size() == 0
+  }
+
+    @Test
+  public void deleteWholeListAsField() {
+    root['post']['tags'] << "BAR"
+    root['post']['tags'] << "FOO"
+
+    root.commit().clear()
+    
+    root['post'].delete('tags')
+
+    root.commit().clear()
+    
+    assert root['post']['tags'].size() == 0
+  }
 }

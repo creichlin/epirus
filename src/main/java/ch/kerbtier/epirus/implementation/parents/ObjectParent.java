@@ -11,8 +11,6 @@ public class ObjectParent implements Parent {
   public ObjectParent(EpirusObjectImplementation parent, String field) {
     this.parent = parent;
     this.field = field;
-    
-    System.out.println("OP " + field);
   }
 
   @Override
