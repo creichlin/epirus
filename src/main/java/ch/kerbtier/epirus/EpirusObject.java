@@ -1,7 +1,5 @@
 package ch.kerbtier.epirus;
 
-import ch.kerbtier.pogo.PogoObject;
-
 public interface EpirusObject extends EpirusContainer {
   
   Object get(String field);

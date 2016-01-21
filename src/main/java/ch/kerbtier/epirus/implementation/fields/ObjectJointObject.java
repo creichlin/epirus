@@ -18,11 +18,7 @@ public class ObjectJointObject implements ObjectJoint, JointObject {
     this.parent = parent;
     this.pogoValue = pogoValue;
     
-    if(pogoValue == null) {
-      epirusValue = new EpirusObjectImplementation(schema, this, null);
-    } else {
-      epirusValue = new EpirusObjectImplementation(schema, this, pogoValue);
-    }
+    epirusValue = new EpirusObjectImplementation(schema, this, pogoValue);
   }
 
   @Override

@@ -25,7 +25,15 @@ public interface ObjectJoint extends Joint {
       return new ObjectJointObject((MapEntity) entity, epirusParent, (PogoObject) pogoValue);
 
     } else if (entity.is(Type.LIST)) {
-      return new ObjectJointList((ListEntity) entity, epirusParent, (PogoList) pogoValue);
+      Entity subEntity = ((ListEntity)entity).get();
+      
+      if(subEntity.is(Type.MAP)) {
+        return new ObjectJointObjectList((ListEntity) entity, epirusParent, (PogoList) pogoValue);
+      } else if(subEntity.getType().isPrimitive()) {
+        return new ObjectJointPrimitiveList((ListEntity) entity, epirusParent, (PogoList) pogoValue);
+      } else {
+        throw new AssertionError();
+      }
 
     } else if (entity.getType().isPrimitive()) {
       return new ObjectJointPrimitive(entity, epirusParent, pogoValue);

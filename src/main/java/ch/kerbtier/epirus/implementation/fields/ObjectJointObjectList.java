@@ -2,28 +2,28 @@ package ch.kerbtier.epirus.implementation.fields;
 
 import ch.kerbtier.achaia.schema.ListEntity;
 import ch.kerbtier.epirus.implementation.EpirusObjectImplementation;
-import ch.kerbtier.epirus.implementation.EpirusPrimitiveListImplementation;
+import ch.kerbtier.epirus.implementation.EpirusObjectListImplementation;
 import ch.kerbtier.pogo.Pogo;
 import ch.kerbtier.pogo.PogoList;
 
-public class ObjectJointList implements ObjectJoint, JointList {
+public class ObjectJointObjectList implements ObjectJoint, JointList {
 
   private ListEntity schema;
   private PogoList pogoValue;
   private PogoList toDelete = null;
   
   private EpirusObjectImplementation parent = null;
-  private EpirusPrimitiveListImplementation epirusValue = null;
+  private EpirusObjectListImplementation epirusValue = null;
   
-  public ObjectJointList(ListEntity schema, EpirusObjectImplementation parent, PogoList pogoValue) {
+  public ObjectJointObjectList(ListEntity schema, EpirusObjectImplementation parent, PogoList pogoValue) {
     this.schema = schema;
     this.parent = parent;
     this.pogoValue = pogoValue;
     
     if(pogoValue == null) {
-      epirusValue = new EpirusPrimitiveListImplementation(schema, this, null);
+      epirusValue = new EpirusObjectListImplementation(schema, this, null);
     } else {
-      epirusValue = new EpirusPrimitiveListImplementation(schema, this, pogoValue);
+      epirusValue = new EpirusObjectListImplementation(schema, this, pogoValue);
     }
   }
 
@@ -54,7 +54,7 @@ public class ObjectJointList implements ObjectJoint, JointList {
   @Override
   public void delete() {
     // discard epirus node and create a new empty one
-    epirusValue = new EpirusPrimitiveListImplementation(schema, this, null);
+    epirusValue = new EpirusObjectListImplementation(schema, this, null);
     
     if(pogoValue != null) {
       // store old pogo node so we can delete it on commit
